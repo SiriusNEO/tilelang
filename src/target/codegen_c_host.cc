@@ -35,6 +35,7 @@
 
 // For escaping strings embedded into generated C sources
 #include "support/str_escape.h"
+#include "tvm/tir/builtin.h"
 
 namespace tvm {
 namespace tl {
@@ -342,6 +343,10 @@ void CodeGenCHost::VisitExpr_(const tvm::tir::CallNode *op,
   } else if (op->op.same_as(builtin::tvm_throw_last_error())) {
     this->PrintIndent();
     this->stream << "return -1;\n";
+  } else if (op->op.same_as(builtin_call_extern_) ||
+             op->op.same_as(builtin_call_pure_extern_)) {
+    // Lower
+
   } else {
     tvm::codegen::CodeGenC::VisitExpr_(op, os);
   }
